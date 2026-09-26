@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Para ti, Vale ❤️</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            min-height: 100%;
+        }
+
+        body {
+            font-family: Georgia, "Times New Roman", serif;
+            background: linear-gradient(135deg, #ff758c, #ff7eb3, #c471ed);
+            color: #4a2632;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           CORAZONES
+        ========================== */
+
+        .heart {
+            position: fixed;
+            bottom: -50px;
+            font-size: 25px;
+            animation: floatHeart linear infinite;
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translateY(0) rotate(0deg);
+                opacity: 0;
+            }
+
+            15% {
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: translateY(-110vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* =========================
+           PANTALLA INICIAL
+        ========================== */
+
+        #inicio {
+            position: fixed;
+            inset: 0;
+            z-index: 100;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+
+            background:
+                radial-gradient(circle at top, rgba(255,255,255,.25), transparent 40%),
+                linear-gradient(135deg, #ff758c, #ff7eb3, #c471ed);
+
+            transition: opacity 1s ease, visibility 1s ease;
+        }
+
+        #inicio.ocultar {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .sobre-container {
+            text-align: center;
+            animation: aparecer 1.5s ease;
+        }
+
+        .sobre {
+            position: relative;
+            width: 280px;
+            height: 190px;
+            margin: 0 auto 30px;
+            cursor: pointer;
+            filter: drop-shadow(0 20px 25px rgba(0,0,0,.25));
+            transition: transform .4s ease;
+        }
+
+        .sobre:hover {
+            transform: scale(1.05);
+        }
+
+        .sobre-cuerpo {
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+            height: 140px;
+            background: #fff7f8;
+            border-radius: 0 0 12px 12px;
+        }
+
+        .sobre-cuerpo::before,
+        .sobre-cuerpo::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            width: 0;
+            height: 0;
+            border-style: solid;
+        }
+
+        .sobre-cuerpo::before {
+            left: 0;
+            border-width: 140px 140px 0 0;
+            border-color: #ffd5df transparent transparent transparent;
+        }
+
+        .sobre-cuerpo::after {
+            right: 0;
+            border-width: 0 140px 140px 0;
+            border-color: transparent #ffc1d0 transparent transparent;
+        }
+
+        .tapa {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 140px solid transparent;
+            border-right: 140px solid transparent;
+            border-top: 100px solid #ffb6c8;
+            transform-origin: top;
+            transition: transform 1s ease;
+            z-index: 5;
+        }
+
+        .sobre.abierto .tapa {
+            transform: rotateX(180deg);
+        }
+
+        .sello {
+            position: absolute;
+            top: 75px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            font-size: 45px;
+            transition: opacity .4s ease;
+        }
+
+        .sobre.abierto .sello {
+            opacity: 0;
+        }
+
+        .titulo-inicio {
+            color: white;
+            font-size: clamp(28px, 8vw, 45px);
+            margin: 0 0 10px;
+            text-shadow: 0 3px 10px rgba(0,0,0,.2);
+        }
+
+        .subtitulo-inicio {
+            color: white;
+            font-size: 18px;
+            margin-bottom: 25px;
+        }
+
+        .boton {
+            border: none;
+            background: white;
+            color: #d6336c;
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-size: 17px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 10px 25px rgba(0,0,0,.2);
+            transition: .3s;
+        }
+
+        .boton:hover {
+            transform: scale(1.06);
+        }
+
+        /* =========================
+           CARTA
+        ========================== */
+
+        #carta {
+            display: none;
+            min-height: 100vh;
+            padding: 35px 15px;
+            animation: aparecer 1.5s ease;
+        }
+
+        #carta.visible {
+            display: block;
+        }
+
+        .papel {
+            position: relative;
+            width: 100%;
+            max-width: 760px;
+            margin: auto;
+            padding: 40px 25px;
+            background: #fffaf4;
+            border-radius: 18px;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,.3),
+                inset 0 0 40px rgba(180,120,80,.05);
+        }
+
+        .decoracion {
+            text-align: center;
+            font-size: 45px;
+            margin-bottom: 5px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #d6336c;
+            font-size: clamp(30px, 8vw, 46px);
+            margin: 5px 0 10px;
+        }
+
+        .fecha {
+            text-align: center;
+            color: #999;
+            font-style: italic;
+            margin-bottom: 30px;
+        }
+
+        .foto {
+            display: block;
+            width: min(100%, 400px);
+            max-height: 400px;
+            object-fit: cover;
+            margin: 0 auto 30px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,.2);
+        }
+
+        .texto {
+            font-size: 19px;
+            line-height: 1.9;
+        }
+
+        .texto p {
+            margin: 0 0 22px;
+        }
+
+        .destacado {
+            padding: 20px;
+            margin: 30px 0;
+            background: #ffe5ed;
+            border-left: 5px solid #d6336c;
+            border-radius: 10px;
+            color: #9c2450;
+            font-style: italic;
+            text-align: center;
+        }
+
+        .firma {
+            text-align: center;
+            margin-top: 40px;
+            color: #d6336c;
+            font-size: 28px;
+            font-weight: bold;
+        }
+
+        /* =========================
+           BOTÓN FINAL
+        ========================== */
+
+        .boton-final {
+            display: block;
+            margin: 35px auto 10px;
+            border: none;
+            padding: 16px 25px;
+            border-radius: 50px;
+            background: #d6336c;
+            color: white;
+            font-size: 17px;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(214,51,108,.3);
+            transition: .3s;
+        }
+
+        .boton-final:hover {
+            background: #a61e4d;
+            transform: scale(1.05);
+        }
+
+        #sorpresa {
+            display: none;
+            text-align: center;
+            margin-top: 25px;
+            padding: 25px;
+            background: linear-gradient(135deg, #fff0f5, #ffe0eb);
+            border-radius: 15px;
+            animation: aparecer 1s ease;
+        }
+
+        #sorpresa h2 {
+            color: #d6336c;
+        }
+
+        #sorpresa p {
+            font-size: 19px;
+            line-height: 1.7;
+        }
+
+        /* =========================
+           ANIMACIONES
+        ========================== */
+
+        @keyframes aparecer {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes latir {
+            0%, 100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+        }
+
+        .latido {
+            display: inline-block;
+            animation: latir 1.3s infinite;
+        }
+
+        /* =========================
+           CELULAR
+        ========================== */
+
+        @media (max-width: 600px) {
+
+            #carta {
+                padding: 15px 10px;
+            }
+
+            .papel {
+                padding: 30px 20px;
+            }
+
+            .texto {
+                font-size: 17px;
+                line-height: 1.8;
+            }
+
+            .sobre {
+                transform: scale(.85);
+            }
+
+            .sobre:hover {
+                transform: scale(.9);
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- =====================================
+         CORAZONES FLOTANDO
+    ====================================== -->
+
+    <div class="heart" style="left:5%; animation-duration:8s; animation-delay:0s;">❤️</div>
+    <div class="heart" style="left:15%; animation-duration:10s; animation-delay:2s;">💕</div>
+    <div class="heart" style="left:27%; animation-duration:7s; animation-delay:4s;">💗</div>
+    <div class="heart" style="left:40%; animation-duration:11s; animation-delay:1s;">❤️</div>
+    <div class="heart" style="left:55%; animation-duration:9s; animation-delay:3s;">💖</div>
+    <div class="heart" style="left:68%; animation-duration:8s; animation-delay:5s;">💕</div>
+    <div class="heart" style="left:80%; animation-duration:10s; animation-delay:2s;">❤️</div>
+    <div class="heart" style="left:92%; animation-duration:7s; animation-delay:6s;">💗</div>
+
+
+    <!-- =====================================
+         PANTALLA INICIAL
+    ====================================== -->
+
+    <section id="inicio">
+
+        <div class="sobre-container">
+
+            <div class="sobre" id="sobre">
+
+                <div class="tapa"></div>
+
+                <div class="sobre-cuerpo"></div>
+
+                <div class="sello">❤️</div>
+
+            </div>
+
+            <h1 class="titulo-inicio">
+                Tengo algo para ti...
+            </h1>
+
+            <p class="subtitulo-inicio">
+                Una pequeña sorpresa hecha especialmente para ti 💌
+            </p>
+
+            <button class="boton" onclick="abrirCarta()">
+                💌 Abrir mi carta
+            </button>
+
+        </div>
+
+    </section>
+
+
+    <!-- =====================================
+         CARTA
+    ====================================== -->
+
+    <main id="carta">
+
+        <div class="papel">
+
+            <div class="decoracion">
+                <span class="latido">❤️</span>
+            </div>
+
+            <h1>Para la persona que hace mis días más bonitos ✨</h1>
+
+            <div class="fecha">
+               
+            </div>
+
+
+            <img class="foto" src="C:\Users\Equipo\Downloads\imagen.jfif" alt="Nuestro Recuerdo">
+
+            <!--
+            <img class="foto" src="foto.jpg" alt="Nuestro recuerdo">
+            -->
+
+
+            <div class="texto">
+
+                <p>
+                    Vale,
+                </p>
+
+                <p>
+                    Si estás leyendo esto es porque 
+                    abriste mi pequeña sorpresa. 
+                
+                    Puede que esto sea solamente una página,
+                    pero detrás de cada palabra hay algo mucho más
+                    importante, todo el cariño que siento por ti.
+                </p>
+
+                <p>
+                    Muchas veces las palabras no me alcanzan para explicar
+                    lo que siento por ti.
+                    Aun así, quería intentar hacerlo de una manera
+                    diferente y crear algo que fuera solamente tuyo.
+                </p>
+
+                <div class="destacado">
+                    De todas las casualidades bonitas que podían
+                    ocurrir en mi vida, conocerte fue una de mis
+                    favoritas. ❤️
+                </div>
+
+                <p>
+                    Me encanta tu forma de ser, tu sonrisa, tu manera
+                    de hablar, tus ocurrencias y todos esos pequeños
+                    detalles que quizá tú no consideras importantes,
+                    pero que para mí hacen que seas tú.
+
+                    Gracias por cada conversación, por cada risa,
+                    por cada abrazo, por cada momento bonito y también
+                    por estar ahí en los momentos que no han sido tan
+                    fáciles.
+                </p>
+
+                <p>
+                    Gracias simplemente por ser tú.
+                </p>
+
+                <p>
+                    Desde que llegaste a mi vida, hay momentos que
+                    se sienten diferentes. Una canción puede recordarme
+                    a ti, un lugar puede hacerme pensar en nosotros y
+                    hasta las cosas más pequeñas pueden hacerme sonreír
+                    cuando me acuerdo de ti.
+                </p>
+
+                <p>
+                    No sé exactamente qué nos tiene preparado el futuro,
+                    pero sí sé algo:
+                    <strong>
+                        quiero seguir creando recuerdos contigo.
+                    </strong>
+                </p>
+
+                <p>
+                    Quiero seguir riéndome contigo, seguir conociéndote,
+                    acompañarte en tus sueños, celebrar tus logros y
+                    estar presente en todos esos pequeños momentos que
+                    terminan convirtiéndose en grandes recuerdos.
+                </p>
+
+                <div class="destacado">
+                    Y si algún día llegas a olvidar lo especial que eres,
+                    espero que vuelvas a esta carta y recuerdes que
+                    alguien pensó en ti mientras escribía cada una
+                    de estas palabras. 
+                </div>
+
+                <p>
+                    No quiero que esta carta sea solamente algo bonito
+                    que leas una vez. Quiero que sea un pequeño recuerdo
+                    de lo mucho que significas para mí.
+                
+                    Te quiero por lo que eres, por lo que me haces sentir
+                    y por todos esos momentos que hemos compartido.
+                </p>
+
+                <p>
+                    Y aunque una página como esta nunca podría expresar
+                    todo lo que siento, espero que al menos pueda sacarte
+                    una sonrisa.
+                </p>
+
+            </div>
+
+
+            <div class="firma">
+
+                Con todo mi cariño ❤️<br>
+
+                <span style="font-size:20px;">
+                    Sebas P
+                </span>
+
+            </div>
+
+
+            <button class="boton-final" onclick="mostrarSorpresa()">
+                💖 Hay algo más...
+            </button>
+
+
+            <div id="sorpresa">
+
+                <h2>
+                     Una última cosa
+                </h2>
+
+                <p>
+                    Si llegaste hasta aquí, quiero que sepas que
+                    probablemente no tienes idea de lo feliz que me
+                    hace tenerte en mi vida.
+                </p>
+
+                <p>
+                    Gracias por existir y por formar parte de mi historia.
+                
+                    Espero que podamos seguir escribiendo muchos
+                    capítulos juntos. ✨
+                </p>
+
+                <div style="font-size:55px; margin-top:20px;">
+                    💕
+                </div>
+
+            </div>
+
+        </div>
+
+    </main>
+
+
+    <!-- =====================================
+         JAVASCRIPT
+    ====================================== -->
+
+    <script>
+
+        function abrirCarta() {
+
+            const sobre = document.getElementById("sobre");
+            const inicio = document.getElementById("inicio");
+            const carta = document.getElementById("carta");
+
+            // Abrir sobre
+            sobre.classList.add("abierto");
+
+            // Esperar un poco para mostrar la carta
+            setTimeout(function() {
+
+                inicio.classList.add("ocultar");
+
+                carta.classList.add("visible");
+
+                // Llevar al principio
+                window.scrollTo({
+                    top: 0,
+                    behavior: "smooth"
+                });
+
+            }, 900);
+        }
+
+
+        function mostrarSorpresa() {
+
+            const sorpresa = document.getElementById("sorpresa");
+
+            sorpresa.style.display = "block";
+
+            setTimeout(function() {
+
+                sorpresa.scrollIntoView({
+                    behavior: "smooth",
+                    block: "center"
+                });
+
+            }, 100);
+
+            crearExplosionCorazones();
+        }
+
+
+        function crearExplosionCorazones() {
+
+            const corazones = [
+                "❤️",
+                "💕",
+                "💗",
+                "💖",
+                "💘",
+                "💝"
+            ];
+
+            for (let i = 0; i < 25; i++) {
+
+                const corazon = document.createElement("div");
+
+                corazon.innerHTML =
+                    corazones[Math.floor(Math.random() * corazones.length)];
+
+                corazon.style.position = "fixed";
+                corazon.style.left = Math.random() * 100 + "vw";
+                corazon.style.top = "50vh";
+                corazon.style.fontSize =
+                    (15 + Math.random() * 30) + "px";
+
+                corazon.style.zIndex = "200";
+                corazon.style.pointerEvents = "none";
+
+                document.body.appendChild(corazon);
+
+                const destinoX =
+                    (Math.random() - 0.5) * 500;
+
+                const destinoY =
+                    (Math.random() - 0.5) * 700;
+
+                corazon.animate(
+                    [
+                        {
+                            transform: "translate(0, 0) scale(1)",
+                            opacity: 1
+                        },
+
+                        {
+                            transform:
+                                `translate(${destinoX}px, ${destinoY}px) scale(1.8)`,
+                            opacity: 0
+                        }
+                    ],
+                    {
+                        duration: 1800 + Math.random() * 1000,
+                        easing: "ease-out"
+                    }
+                );
+
+                setTimeout(function() {
+                    corazon.remove();
+                }, 3000);
+            }
+        }
+
+    </script>
+
+</body>
+</html>
